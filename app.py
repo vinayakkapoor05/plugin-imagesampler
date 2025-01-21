@@ -95,7 +95,7 @@ if __name__ == '__main__':
         action='append',
         help='ID or name of a stream. Multiple streams can be specified, each stream with the --stream option.')
     parser.add_argument(
-        '--name', dest='name',
+        '--name', dest='name', default=[],
         action='append',
         help='(optional) Name of the stream to report. When specified the count and order should match with given streams.')
     parser.add_argument(
