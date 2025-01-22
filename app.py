@@ -82,10 +82,14 @@ def main(args):
             workers.append(worker)
             worker.start()
 
-
+    # If one of the workers fails, the main process should return the exit code of the failed worker.
+    # Hopefully, the error messages are shown in the main process's stdout.
+    exit_code = 0
     for worker in workers:
         worker.join()
-    return 0
+        if worker.exitcode != 0:
+            exit_code = worker.exitcode
+    return exit_code
 
 
 if __name__ == '__main__':
