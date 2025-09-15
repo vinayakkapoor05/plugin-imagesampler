@@ -28,14 +28,14 @@ def capture(plugin, stream, stream_name, out_dir=""):
     with Camera(stream) as camera:
         for snapshot in camera.stream():
             sample = snapshot
-            break 
+            break
     
     if out_dir == "":
         sample.save(sample_file_name)
-        meta = {
-            "camera": stream_name,
-        }
-        plugin.upload_file(sample_file_name, meta=meta)
+        
+        plugin.upload_file(sample_file_name, timestamp=sample.timestamp)
+        
+        logging.info(f"uploaded {sample_file_name}")
     else:
         dt = datetime.fromtimestamp(sample.timestamp / 1e9)
         base_dir = os.path.join(out_dir, stream, dt.astimezone(timezone.utc).strftime('%Y/%m/%d/%H'))
