@@ -24,11 +24,14 @@ logging.basicConfig(
 
 def capture(plugin, stream, stream_name, out_dir=""):
     sample_file_name = "sample.jpg"
-    with Camera(stream) as cam:
-        sample = cam.snapshot()
+    
+    with Camera(stream) as camera:
+        for snapshot in camera.stream():
+            sample = snapshot
+            break 
+    
     if out_dir == "":
         sample.save(sample_file_name)
-        # The camera name is added in the meta
         meta = {
             "camera": stream_name,
         }
@@ -39,7 +42,6 @@ def capture(plugin, stream, stream_name, out_dir=""):
         os.makedirs(base_dir, exist_ok=True)
         sample_path = os.path.join(base_dir, dt.astimezone(timezone.utc).strftime('%Y-%m-%dT%H:%M:%S%z.jpg'))
         sample.save(sample_path)
-
 
 def run(stream, stream_name, cronjob, out_dir=""):
     logger_header = f'Stream {stream} name: {stream_name}'
